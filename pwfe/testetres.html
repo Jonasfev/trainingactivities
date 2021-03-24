@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        var dominio = "http://jonasfev.unaux.com/person/ftpproj/pwfe/";
+
+        function Veiculo(marca, modelo, ano){
+            this.marca = marca;
+            this.modelo = modelo;
+            this.ano = ano;
+        }
+
+        function showDadosListener(){
+            console.log(this.responseText);
+
+        }
+
+        function enviarDadosJson(){
+            objVeic = new Veiculo("Jeep", "Wrangler", 2012);
+            var str_json = JSON.stringify(objVeic);
+
+            request = new XMLHttpRequest();
+            request.open("POST", dominio + "basedois.php", true);
+            request.onload = showDadosListener;
+            request.setRequestHeader("Content-type", "application/json");
+            request.send(str_json);
+        }
+
+    </script>
+</head>
+<body>
+    <button onclick="enviarDadosJson();">
+        Clique Para Enviar dados Veiculos
+    </button>
+
+    <div class="container"></div>
+    
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajax Request</title>
+    <script>
+        var dominio = "http://jonasfev.unaux.com/person/ftpproj/pwfe/";
+
+        function showDadosListener(){
+            console.log(this.responseText);
+            objPessoa = JSON.parse(this.responseText);
+
+            document.getElementById("nome").innerHTML = objPessoa.nome;
+            document.getElementById("idade").innerHTML = objPessoa.idade;
+            document.getElementById("cidade").innerHTML = objPessoa.cidade;
+        }
+
+        function loadParte(){
+            var parteExtra  = new XMLHttpRequest();
+            parteExtra.onload = showDadosListener;
+            parteExtra.open("get", dominio + "base.php", true);
+            parteExtra.send();
+        }
+    </script>
+</head>
+<body>
+    <button onclick="loadParte();">Clique para carregar dados pessoas </button>
+
+    <div class="container">
+        <div id="nome"></div>
+        <div id="idade"></div>
+        <div id="cidade"></div>
+
+    </div>
+    
+</body>
+</html>

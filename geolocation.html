@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script>
+        var aux;
+        function getLocation(){
+            aux = document.getElementById("txtPosicao");
+            if(navigator.geolocation){
+                navigator.geolocation.getCurrentPosition(showPosition);
+            } else {
+                aux.innerHTML = "Geolocation não suportada";
+            }
+        }
+
+        function showPosition(position){
+            aux.innerHTML = "Location: " + position.coords.latitude + "<br> Longitude: " + position.coords.longitude;
+
+            txtCoordenadas = position.coords.latitude + "," + position.coords.longitude;
+            window.open("https://www.google.com/maps/search/?api=1query="+txtCoordenadas);
+        }
+    </script>
+</head>
+<body>
+    <p><button onclick="getLocation();">Capturar Localizacao</button></p>
+    <h2 id="txtPosicao"></h2>
+</body>
+</html>

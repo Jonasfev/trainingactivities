@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag And Drop</title>
+    <style>
+        body {
+            margin: 40px;
+        }
+
+        .popup {
+            background-color: white;
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-left: -150px;
+            margin-top: -100px;
+            padding: 10px;
+            width: 300px;
+            height: 200px;
+            border: 1px solid black;
+
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-gap: 10px;
+            background-color: #FFFFFF;
+            color: #444444;
+        }
+
+        .exclude {
+            background-color: rgb(175, 0, 0);
+            margin-left: 10px;
+            text-align: center;
+            border-radius: 5px;
+            color: black;
+            display: inline;
+        }
+
+
+        .caixa {
+            background-color: cadetblue;
+            color: #ffffff;
+            border-radius: 5px;
+            padding: 20px;
+            font-size: 150%;
+            height: 50vh;
+        }
+
+
+
+        .tarefa {
+            background-color: orange;
+            color: black;
+            padding: 5px;
+            margin: 4px;
+            border-radius: 5px;
+        }
+
+        .nome {
+            background-color: yellow;
+            color: black;
+            margin: 4px;
+            padding: 4px;
+            border-radius: 5px;
+            display: inline;
+        }
+
+        .button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 5%;
+            margin-left: 48%;
+            border-radius: 100%;
+
+        }
+    </style>
+    <script>
+
+        var corErro = "red";
+        var corAntiga = "cadetblue";
+        var countCaixa = 0;
+        var arrayNomes = [];
+        var arrayTimes = [];
+
+        function AddCaixa() {
+            document.getElementById('pop').style.display = 'none';
+            var caixaNova = document.createElement("div");
+            var nomeDiv = document.createElement("div");
+            var divAtual = document.getElementById("container");
+            
+            nomeDiv.setAttribute("id", "name" + countCaixa);
+            nomeDiv.setAttribute("class", "nome");
+            nomeDiv.innerText = document.getElementById('nome').value;
+            caixaNova.appendChild(nomeDiv);
+            countCaixa++;
+            caixaNova.setAttribute("id", "caixa" + countCaixa);
+            caixaNova.setAttribute("class", "caixa");
+            caixaNova.setAttribute("ondragover", "permiteSoltar(event);");
+            caixaNova.setAttribute("ondrop", "soltar(event);");
+            caixaNova.setAttribute("ondragleave", "desistir(event);");
+            caixaNova.setAttribute("ondragenter", "entraDrag(event);");
+            divAtual.appendChild(caixaNova);
+
+
+        }
+        function Teams(nome, nomePessoas){
+            this.nome = nome;
+            this.nomePessoas = nomePessoas;
+
+        }
+        function desistir(ev) {
+            ev.preventDefault();
+            if (ev.target.id == "caixa3") {
+                document.getElementById("caixa3").style.background = corAntiga;
+            }
+        }
+        function entraDrag(ev) {
+            ev.preventDefault();
+            if (ev.target.id == "caixa3") {
+                document.getElementById("caixa3").style.background = corErro;
+            }
+        }
+        function arrastar(ev) {
+            ev.dataTransfer.setData("srcID", ev.target.id);
+            console.log("Evento Arrastar")
+        }
+        function permiteSoltar(ev) {
+            ev.preventDefault();
+            console.log("Evento onDragOver")
+        }
+        function soltar(ev) {
+            ev.preventDefault();
+
+            if (ev.target.id == "caixa3") {
+
+            } else {
+                var data = ev.dataTransfer.getData("srcID");
+                ev.target.appendChild(document.getElementById(data));
+                console.log("Soltar")
+
+            }
+
+        }
+
+        function criarTime() {
+            document.getElementById('pop').style.display = 'block';
+        }
+
+        function nomeJogadores() {
+            i = parseInt(document.getElementById('number').value);
+            
+            AddCaixa();
+            if(countCaixa > 0 ){
+                
+                var x = document.getElementById("jogadores");
+                var y = document.getElementById("lista");
+                x.parentNode.removeChild(x);
+                x = document.createElement("div");
+                x.setAttribute("id", "jogadores");
+                c = document.getElementById("confirm");
+                y.insertBefore(x, c);
+
+            }
+
+
+            if (i < 0) {
+                alert("Numero de Times Invalido, ou Nome de Time Repetido");
+
+            
+
+            } else {
+                for (a = 0; a < i; a++) {
+                    
+                    var x = document.createElement("INPUT");
+                    x.setAttribute("type", "text");
+                    var atual = document.getElementById("jogadores");
+                    x.setAttribute("id", "nome" + a);
+                    atual.append(x);
+                    
+
+                }
+                document.getElementById('lista').style.display = 'block';
+            
+                
+                
+            }
+        }
+
+
+        function defined(){
+            for (a =  0; a <  parseInt(document.getElementById('number').value); a++){
+                controleNomes(a);
+            }
+            document.getElementById('lista').style.display = 'none';
+            arrayTimes [countCaixa] = new Teams(document.getElementById("nome").value, arrayNomes);
+            for (b= 0; b < arrayTimes[countCaixa].nomePessoas.length ; b++){
+                var divAtualizada = document.getElementById("jogador" + b + arrayTimes[countCaixa].nome);
+                divAtualizada.innerText = arrayTimes[countCaixa].nomePessoas[b];
+
+            }
+            arrayNomes = [];
+
+        }
+        function controleNomes(countJogador) {
+            i = document.getElementById("nome" + countJogador).value;
+            nomeTime = document.getElementById('nome').value;
+            arrayNomes.push(i);
+            var nomeDiv = document.createElement("div");
+            var divAtualizada = document.getElementById("caixa" + countCaixa);
+            nomeDiv.setAttribute("id", "jogador" + countJogador + nomeTime);
+            nomeDiv.setAttribute("class", "tarefa");
+            nomeDiv.setAttribute("draggable", "true");
+            nomeDiv.setAttribute("ondragstart", "arrastar(event)");
+            divAtualizada.appendChild(nomeDiv);
+        
+           
+
+        }
+    </script>
+</head>
+
+<body>
+    <h1>Exemplo Drag and Drop</h1>
+    <div class="container" id="container">
+        
+
+        </div>
+
+
+    </div>
+    <button id="btn" class="button button5" onclick="criarTime();">+</button>
+    <div id="pop" class="popup">
+        Nome do Time:
+        <br>
+        <input id="nome" type="text" />
+        <br>
+        Numero de Jogadores:
+        <br>
+        <input id="number" type="number" value="0" />
+        <br>
+        <a onclick="nomeJogadores();">Avançar</a>
+
+    </div>
+    <div id="lista" class="popup">
+        <span>Nomes: </span>
+        <div id="jogadores">
+        </div>
+        <div id = "confirm">
+            <a  onclick="defined();">Confirmar</a>
+        </div>
+
+    </div>
+
+
+</body>
+</body>
+
+</html>
